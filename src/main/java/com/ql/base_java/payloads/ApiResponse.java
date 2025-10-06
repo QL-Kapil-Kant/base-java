@@ -1,6 +1,5 @@
 package com.ql.base_java.payloads;
 
-
 import com.ql.base_java.constant.Constants;
 import lombok.Builder;
 import lombok.Data;
