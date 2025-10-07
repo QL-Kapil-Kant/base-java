@@ -2,8 +2,9 @@ package com.ql.base_java.service.Impl;
 
 import com.ql.base_java.jwt.JwtUtil;
 import com.ql.base_java.model.User;
-import com.ql.base_java.model.dto.LoginDto;
+import com.ql.base_java.payloads.LoginRequest;
 import com.ql.base_java.model.dto.UserDto;
+import com.ql.base_java.payloads.LoginResponse;
 import com.ql.base_java.repository.UserRepository;
 import com.ql.base_java.service.AuthService;
 import lombok.extern.slf4j.Slf4j;
@@ -63,12 +64,18 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public String loginUser(LoginDto loginDto) {
+    public LoginResponse loginUser(LoginRequest loginRequest) {
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
-            return jwtUtil.generateToken(loginDto.getEmail());
-        } catch (BadCredentialsException ex) {
-            throw ex;
+            User user = userRepository.findByEmail(loginRequest.getEmail()).orElseThrow(() -> new BadCredentialsException("Invalid email or password"));
+
+            if (passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
+                log.info("Password matches for user: {}", loginRequest.getEmail());
+                String jwtToken = jwtUtil.generateToken(user.getId().toString());
+                return LoginResponse.builder().token(jwtToken).build();
+            } else {
+                log.info("Password does not match for user: {}", loginRequest.getEmail());
+                throw new BadCredentialsException("Invalid email or password");
+            }
         } catch (Exception e) {
             log.info("Error during authentication: {} and error name: {}", e.getMessage(), e.getClass());
             throw new RuntimeException("Error during authentication: " + e.getMessage());

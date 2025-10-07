@@ -1,8 +1,9 @@
 package com.ql.base_java.controller;
 
-import com.ql.base_java.model.dto.LoginDto;
+import com.ql.base_java.payloads.LoginRequest;
 import com.ql.base_java.model.dto.UserDto;
 import com.ql.base_java.payloads.ApiResponse;
+import com.ql.base_java.payloads.LoginResponse;
 import com.ql.base_java.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -41,9 +42,9 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse> loginUser(@RequestBody @Valid LoginDto loginDto) {
-        String jwtToken = authService.loginUser(loginDto);
-        return new ResponseEntity<>(ApiResponse.builder().status(true).code(212).data(jwtToken).build(), HttpStatus.OK);
+    public ResponseEntity<ApiResponse> loginUser(@RequestBody @Valid LoginRequest loginRequest) {
+        LoginResponse loginResponse = authService.loginUser(loginRequest);
+        return new ResponseEntity<>(ApiResponse.builder().status(true).code(212).data(loginResponse).build(), HttpStatus.OK);
     }
 
 }

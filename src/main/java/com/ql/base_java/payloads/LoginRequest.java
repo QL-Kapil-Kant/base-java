@@ -1,4 +1,4 @@
-package com.ql.base_java.model.dto;
+package com.ql.base_java.payloads;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
-public class LoginDto {
+public class LoginRequest {
 
     @NotBlank(message = "must not be blank")
     @Size(min = 2, max = 50, message = "must be between 2 and 50 characters")

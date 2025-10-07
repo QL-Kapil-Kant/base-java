@@ -1,6 +1,5 @@
 package com.ql.base_java.model.dto;
 
-import com.ql.base_java.model.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
