@@ -14,7 +14,7 @@ public class Constants {
             Map.entry(400, "Bad Request."),
             Map.entry(401, "Unauthorized Access."),
             Map.entry(402, "Payment Required."),
-            Map.entry(403, "Forbidden Access."),
+            Map.entry(403, "Forbidden Access (insufficient permissions)."),
             Map.entry(404, "Not Found."),
             Map.entry(405, "Method Not Allowed."),
             Map.entry(406, "Not Acceptable."),

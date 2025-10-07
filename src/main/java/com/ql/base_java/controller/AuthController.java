@@ -28,8 +28,8 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<ApiResponse> registerUser(@RequestBody @Valid UserDto userDto) {
-        String response = authService.registerUser(userDto);
-        return new ResponseEntity<>(ApiResponse.builder().status(true).code(210).data(response).build(), HttpStatus.OK);
+        authService.registerUser(userDto);
+        return new ResponseEntity<>(ApiResponse.builder().status(true).code(210).build(), HttpStatus.OK);
     }
 
     @GetMapping("/all")

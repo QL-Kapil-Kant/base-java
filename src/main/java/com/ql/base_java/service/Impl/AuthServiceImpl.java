@@ -35,7 +35,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public String registerUser(UserDto userDto) {
+    public void registerUser(UserDto userDto) {
         try {
             User user = modelMapper.map(userDto, User.class);
 
@@ -45,7 +45,6 @@ public class AuthServiceImpl implements AuthService {
             log.info("Mapped user is: {}", user);
 
             userRepository.save(user);
-            return "User registered successfully";
         } catch (Exception e) {
             log.info("Error while registering user: {}", e.getMessage());
             throw new RuntimeException("Error while registering user" + e.getMessage());
@@ -66,8 +65,8 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public String loginUser(LoginDto loginDto) {
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getUserName(), loginDto.getPassword()));
-            return jwtUtil.generateToken(loginDto.getUserName());
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
+            return jwtUtil.generateToken(loginDto.getEmail());
         } catch (BadCredentialsException ex) {
             throw ex;
         } catch (Exception e) {

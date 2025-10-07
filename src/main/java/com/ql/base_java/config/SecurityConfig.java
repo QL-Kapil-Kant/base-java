@@ -1,5 +1,6 @@
 package com.ql.base_java.config;
 
+import com.ql.base_java.exception.CustomAccessDeniedHandler;
 import com.ql.base_java.jwt.JwtAuthEntryPoint;
 import com.ql.base_java.jwt.JwtFilter;
 import com.ql.base_java.service.CustomUserDetailService;
@@ -26,11 +27,13 @@ public class SecurityConfig {
     private final CustomUserDetailService customUserDetailsService;
     private final JwtFilter jwtFilter;
     private final JwtAuthEntryPoint jwtAuthEntryPoint;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
-    public SecurityConfig(CustomUserDetailService customUserDetailService, JwtFilter jwtFilter, JwtAuthEntryPoint jwtAuthEntryPoint) {
+    public SecurityConfig(CustomUserDetailService customUserDetailService, JwtFilter jwtFilter, JwtAuthEntryPoint jwtAuthEntryPoint, CustomAccessDeniedHandler customAccessDeniedHandler) {
         this.customUserDetailsService = customUserDetailService;
         this.jwtFilter = jwtFilter;
         this.jwtAuthEntryPoint = jwtAuthEntryPoint;
+        this.customAccessDeniedHandler = customAccessDeniedHandler;
     }
 
     @Bean
@@ -56,9 +59,14 @@ public class SecurityConfig {
 
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/auth/register", "/api/auth/login").permitAll()
                         .anyRequest().authenticated())
-                .exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(jwtAuthEntryPoint))
+                .exceptionHandling(exceptionHandling ->
+                        exceptionHandling
+                                .authenticationEntryPoint(jwtAuthEntryPoint)
+                                .accessDeniedHandler(customAccessDeniedHandler)
+                )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .httpBasic(Customizer.withDefaults())
                 .authenticationProvider(authenticationProvider())

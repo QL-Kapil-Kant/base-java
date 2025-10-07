@@ -12,7 +12,7 @@ public class LoginDto {
     @NotBlank(message = "must not be blank")
     @Size(min = 2, max = 50, message = "must be between 2 and 50 characters")
     @Email(message = "must be a valid email address")
-    private String userName;
+    private String email;
 
     @NotBlank(message = "must not be blank")
     @Size(min = 8, max = 100, message = "must be between 8 and 100 characters")

@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface AuthService {
 
-    String registerUser(UserDto userDto);
+    void registerUser(UserDto userDto);
 
     List<UserDto> getAllUsers();
 
